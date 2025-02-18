@@ -1,10 +1,13 @@
+import 'package:exemple_firebase/auth/servei_auth.dart';
 import 'package:exemple_firebase/components/boto_auth.dart';
 import 'package:exemple_firebase/components/texfield_auth.dart';
 import 'package:flutter/material.dart';
 
 class PaginaRegistre extends StatelessWidget {
-   ferRegistre() {
-    
+
+   void ferRegistre() {
+    final ServeiAuth serveiAuth = ServeiAuth();
+    serveiAuth.registeAmbEmailPassword("julianpastor@email.com", "123456789");
   }
   const PaginaRegistre({super.key});
 
@@ -115,7 +118,7 @@ class PaginaRegistre extends StatelessWidget {
                 // Boton Registrar.
                 BotoAuth(
                   text: "Registrar",
-                  onTap: ferRegistre(),
+                  onTap: ferRegistre,
                 ),
                 BotoAuth(
                   text: "Logout",
