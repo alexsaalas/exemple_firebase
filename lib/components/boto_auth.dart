@@ -22,7 +22,7 @@ class BotoAuth extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(25),
           child: Text(
-            text, // No longer needs the 'const' since the text is dynamic
+            text, 
             style: const TextStyle(
               color: Colors.orange,
               fontWeight: FontWeight.bold,

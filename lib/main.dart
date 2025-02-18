@@ -11,8 +11,25 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+
       home: PaginaRegistre(), 
+      
       debugShowCheckedModeBanner: false,
+
     );
   }
+
+  /*
+  1) Tener node.js instalat
+  2) Ir a firebase y click a "Go to Console"
+  3) Desde console firebase crear nuevo proyecto
+  4) Ir al menu Compilacion> Habilitar Authentication y  habilitar Firestore Database
+  5) En un cmd ejecutar "npm install -g firebase-tools" (sirve para instalar firebase-tools)
+  6) En un cmd ejecutar "firebase login"
+  
+  */
+
+
+
+
 }

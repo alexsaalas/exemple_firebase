@@ -3,6 +3,9 @@ import 'package:exemple_firebase/components/texfield_auth.dart';
 import 'package:flutter/material.dart';
 
 class PaginaRegistre extends StatelessWidget {
+   ferRegistre() {
+    
+  }
   const PaginaRegistre({super.key});
 
   @override
@@ -110,7 +113,16 @@ class PaginaRegistre extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 // Boton Registrar.
-                BotoAuth(),
+                BotoAuth(
+                  text: "Registrar",
+                  onTap: ferRegistre(),
+                ),
+                BotoAuth(
+                  text: "Logout",
+                  onTap: (){
+
+                  },
+                ),
               ],
             ),
           ),
