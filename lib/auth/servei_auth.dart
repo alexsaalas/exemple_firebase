@@ -5,6 +5,9 @@ class ServeiAuth {
 
   //* Registro
   Future<UserCredential> registeAmbEmailPassword(String email, String password) async {
+    print("email " + email);
+    print("password " + password);
+    
     try {
       // Registra al usuario
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: password);

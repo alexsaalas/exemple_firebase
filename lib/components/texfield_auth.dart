@@ -18,7 +18,7 @@ class TexfieldAuth extends StatelessWidget {
       child: TextField(
         cursorColor: Color.fromARGB(255, 222, 100, 0),
         style: TextStyle(color: Color.fromARGB(255, 154, 69, 0)),
-        controller: TextEditingController(),
+        controller: controller,
         obscureText: false,
         decoration: InputDecoration(
           hintText: hintText,
