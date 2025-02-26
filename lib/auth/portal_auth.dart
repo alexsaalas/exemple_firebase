@@ -1,3 +1,4 @@
+import 'package:exemple_firebase/auth/login_o_registre.dart';
 import 'package:exemple_firebase/pagines/pagina_inici.dart';
 import 'package:exemple_firebase/pagines/pagina_login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,7 +16,7 @@ class PortalAuth extends StatelessWidget {
         if (snapshot.hasData) {
           return const PaginaInici();
         } else {
-          return const PaginaLogin();
+          return const LoginORegistre();
         }
       }
     ),

@@ -6,6 +6,11 @@ class ServeiAuth {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  // Fer logout
+  Future<void> Ferlogout() async {
+    return await _auth.signOut();
+  }
+
   // Fer login
   Future<String?> loginAmbEmailPassword(String email, String password) async {
     try {
@@ -14,32 +19,31 @@ class ServeiAuth {
         password: password,
       );
       return null;
-
     } on FirebaseAuthException catch (e) {
       return "Error ${e.message}";
     }
-
+  }
 
   //* Registro
   Future<String?> registeAmbEmailPassword(String email, String password) async {
-    
-
-    try {  
+    try {
       // Registra al usuario
-      UserCredential userCredential = 
-      await _auth.createUserWithEmailAndPassword(
-        email: email, 
-        password: password);
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
       // Inicia sesión con las mismas credenciales (esto es opcional, pero si se quiere un usuario logueado inmediatamente, es necesario)
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+
+      // Guardar los datos del usuario en Firestore
       _firestore.collection("Usuaris").doc(userCredential.user!.uid).set({
-        "uid": userCredential.user!.uid,           
+        "uid": userCredential.user!.uid,
         "email": email,
-        "nom":"",
+        "nom": "", // Aquí puedes agregar el campo 'nom' si es necesario
       });
 
-      return null; // Devuelve el UserCredential si se registra e inicia sesión correctamente
+      return null; // Devuelve null si el registro y inicio de sesión son exitosos
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "email-already-in-use":
@@ -50,14 +54,11 @@ class ServeiAuth {
           return "El usuario ya está registrado";
         case "weak-password":
           return "La contraseña es muy débil";
-          default:
+        default:
           return "Error ${e.message}";
       }
-        // Maneja los errores específicos de FirebaseAuth
-       // Lanza el error con el mensaje específico
     } catch (e) {
       return "Error $e";
     }
   }
-}
 }

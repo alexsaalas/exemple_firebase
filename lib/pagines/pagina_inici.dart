@@ -1,9 +1,16 @@
+import 'package:exemple_firebase/chat/ServeiChat.dart';
+import 'package:exemple_firebase/components/item_usuari.dart';
 import 'package:flutter/material.dart';
 import 'package:exemple_firebase/auth/servei_auth.dart'; // Asegúrate de importar tu servicio de autenticación
 
-class PaginaInici extends StatelessWidget {
+class PaginaInici extends StatefulWidget {
   const PaginaInici({super.key});
 
+  @override
+  State<PaginaInici> createState() => _PaginaIniciState();
+}
+
+class _PaginaIniciState extends State<PaginaInici> {
   // Método para manejar la desconexión (cerrar sesión)
   Future<void> _logout(BuildContext context) async {
     await ServeiAuth().Ferlogout(); // Llamamos a la función Ferlogout.
@@ -15,6 +22,7 @@ class PaginaInici extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.deepPurple[200],
         title: const Text("Pagina Inici"),
         actions: [
           IconButton(
@@ -25,9 +33,32 @@ class PaginaInici extends StatelessWidget {
           ),
         ],
       ),
-      body: const Center(
-        child: Text("Pagina Inici"),
+      body: StreamBuilder<List<Map<String, dynamic>>>(
+        stream: ServeiChat().getUsuaris(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Text("Error en el snapshot");
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Text("Cargando...");
+          }
+
+          // Se devuelven los datos
+          return ListView(
+            children: snapshot.data!.map<Widget>((dadesUsuari) {
+              return _construeixUsuari(dadesUsuari); // Llamar a tu función _construeixUsuari
+            }).toList(), // Asegúrate de convertir el map en una lista
+          );
+        },
       ),
     );
+  }
+
+  Widget _construeixUsuari(Map<String, dynamic> dadesUsuari) {
+
+    
+    return ItemUsuari(emailUsuari: dadesUsuari["email"]);
+    // Aquí construyes tu widget para mostrar los datos del usuario
+    
   }
 }
