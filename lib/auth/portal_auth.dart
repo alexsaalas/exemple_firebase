@@ -11,8 +11,10 @@ class PortalAuth extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder(
+        // Stream de dades
       stream: FirebaseAuth.instance.authStateChanges(), 
       builder: (context, snapshot) {
+        // Dades que nos llegan del servicio
         if (snapshot.hasData) {
           return const PaginaInici();
         } else {

@@ -23,7 +23,7 @@ class _PaginaIniciState extends State<PaginaInici> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepPurple[200],
-        title: const Text("Pagina Inici"),
+        title:  Text(ServeiAuth().getUsuariActual()!.email.toString()),
         actions: [
           IconButton(
             onPressed: () async {
@@ -55,9 +55,12 @@ class _PaginaIniciState extends State<PaginaInici> {
   }
 
   Widget _construeixUsuari(Map<String, dynamic> dadesUsuari) {
+    if(dadesUsuari ["email"] == ServeiAuth().getUsuariActual()!.email) {
+      return Container();
 
+    }
     
-    return ItemUsuari(emailUsuari: dadesUsuari["email"]);
+    return ItemUsuari(emailUsuari: dadesUsuari["email"], onTap: () {},);
     // Aquí construyes tu widget para mostrar los datos del usuario
     
   }

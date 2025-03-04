@@ -5,18 +5,19 @@ import 'package:flutter/material.dart';
 
 class PaginaRegistre extends StatelessWidget {
   final Function()? ferClic;
+
   void ferRegistre(BuildContext context, String email, String password,
       String confPassword) async {
     if (password.isEmpty || email.isEmpty) {
       // Gestionar-se del cas
       return;
     }
-    ;
 
     if (password != confPassword) {
       // Gestio del cas
       return;
     }
+
     // ? = Puede retornar algo o no retornar nada
     String? error = await ServeiAuth().registeAmbEmailPassword(email, password);
     if (error != null) {
@@ -26,7 +27,7 @@ class PaginaRegistre extends StatelessWidget {
           backgroundColor: Color.fromARGB(255, 250, 183, 159),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           title: const Text("Error"),
-          content: Text("Email i/o password incorrectes."), 
+          content: Text("Email i/o password incorrectes."),
         ),
       );
     }
@@ -81,10 +82,13 @@ class PaginaRegistre extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: Text(
-                          "Registrate",
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 255, 240, 218)),
+                        child: GestureDetector(
+                          onTap: () => ferRegistre(context, tecEmail.text, tecPassword.text, tecConfirmPassword.text),
+                          child: Text(
+                            "Registrate",
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 255, 240, 218)),
+                          ),
                         ),
                       ),
                       Expanded(
@@ -134,7 +138,7 @@ class PaginaRegistre extends StatelessWidget {
                             color: Color.fromARGB(255, 40, 71, 97),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -146,7 +150,6 @@ class PaginaRegistre extends StatelessWidget {
                       ferRegistre(context, tecEmail.text, tecPassword.text,
                           tecConfirmPassword.text);
                     }),
-                
               ],
             ),
           ),

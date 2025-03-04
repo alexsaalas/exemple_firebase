@@ -6,6 +6,13 @@ class ServeiAuth {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+
+
+
+  // Usuari actual
+  User? getUsuariActual(){
+    
+  }
   // Fer logout
   Future<void> Ferlogout() async {
     return await _auth.signOut();
@@ -18,6 +25,16 @@ class ServeiAuth {
         email: email,
         password: password,
       );
+
+      // Comprobar si existe el usuario en Firestore
+      final QuerySnapshot querySnapshot = await _firestore.collection("Usuaris").where("email", isEqualTo: email).get();
+      if(querySnapshot.docs.isEmpty){
+        _firestore.collection("Usuaris").doc(credentialUsuari.user!.uid).set({
+        "uid": credentialUsuari.user!.uid,
+        "email": email,
+        "nom": "", // Aquí puedes agregar el campo 'nom' si es necesario
+      });
+      } 
       return null;
     } on FirebaseAuthException catch (e) {
       return "Error ${e.message}";
@@ -32,9 +49,6 @@ class ServeiAuth {
         email: email,
         password: password,
       );
-
-      // Inicia sesión con las mismas credenciales (esto es opcional, pero si se quiere un usuario logueado inmediatamente, es necesario)
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
 
       // Guardar los datos del usuario en Firestore
       _firestore.collection("Usuaris").doc(userCredential.user!.uid).set({

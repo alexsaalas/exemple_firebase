@@ -11,9 +11,13 @@ class LoginORegistre extends StatefulWidget {
 
 class _LoginORegistreState extends State<LoginORegistre> {
 
-  bool mostraPaginaLogin = true;
+  bool mostraPaginaLogin = false;
+
   void intercambiarMostrarPaginaLogin(){
-    mostraPaginaLogin = !mostraPaginaLogin;
+    // Refrescar el build del widget
+    setState(() {
+      mostraPaginaLogin = !mostraPaginaLogin;
+    });
   }
 
   
@@ -21,6 +25,7 @@ class _LoginORegistreState extends State<LoginORegistre> {
   @override
   Widget build(BuildContext context) {
 
+    // Es igual a == true
     if(mostraPaginaLogin){
     return PaginaLogin(ferClic: intercambiarMostrarPaginaLogin,);
   }else {
