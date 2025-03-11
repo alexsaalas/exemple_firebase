@@ -11,6 +11,7 @@ class ServeiAuth {
 
   // Usuari actual
   User? getUsuariActual(){
+    return _auth.currentUser;
     
   }
   // Fer logout
