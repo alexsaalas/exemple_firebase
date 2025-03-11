@@ -64,10 +64,11 @@ class _PaginaIniciState extends State<PaginaInici> {
     return ItemUsuari(emailUsuari: dadesUsuari["email"], onTap: () {
       Navigator.push(context, 
       MaterialPageRoute(
-        builder: (context) => PaginaChat(idReceptor: dadesUsuari["uid"],)
+        builder: (context) => PaginaChat(idReceptor: dadesUsuari["uid"],),
         )
         );
-    },);
+      },
+    );
     // Aquí construyes tu widget para mostrar los datos del usuario
     
   }

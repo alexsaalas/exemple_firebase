@@ -1,19 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:exemple_firebase/auth/servei_auth.dart';
 import 'package:exemple_firebase/chat/ServeiChat.dart';
+import 'package:exemple_firebase/components/bombolla_missatge.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class PaginaChat extends StatefulWidget {
   final String idReceptor;
-  const PaginaChat({super.key, required this.idReceptor,});
+  const PaginaChat({super.key, required this.idReceptor});
 
   @override
   State<PaginaChat> createState() => _PaginaChatState();
 }
 
 class _PaginaChatState extends State<PaginaChat> {
-
   final TextEditingController tecMissatge = TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,6 @@ class _PaginaChatState extends State<PaginaChat> {
       ),
       body: Column(
         children: [
-
           // Zona mensajes
           _crearZonaMostrarMensajes(),
 
@@ -37,7 +37,35 @@ class _PaginaChatState extends State<PaginaChat> {
   }
 
   Widget _crearZonaMostrarMensajes() {
-    return Expanded(child: Text("Zona1"));
+    return Expanded(
+      child: StreamBuilder<QuerySnapshot>(
+        stream: ServeiChat().getMissatges(
+          ServeiAuth().getUsuariActual()!.uid,
+          widget.idReceptor,
+        ),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Text("Error en el snapshot");
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Text("Cargando...");
+          }
+
+          // Retornar datos (mensajes)
+          if (snapshot.hasData) {
+            return ListView(
+              children: snapshot.data!.docs.map((document) {
+                return _construirItemMissatge(document);
+              }).toList(),
+            );
+          }
+
+          // Si no hay datos
+          return const Center(child: Text("No hay mensajes"));
+        },
+      ),
+    );
   }
 
   Widget _crearZonaEnviarMensaje() {
@@ -66,17 +94,23 @@ class _PaginaChatState extends State<PaginaChat> {
   }
 
   void enviarMissatge() async {
+    if (tecMissatge.text.isNotEmpty) {
+      await ServeiChat().enviarMensaje(
+        widget.idReceptor,
+        tecMissatge.text,
+      );
 
-    if(tecMissatge.text.isNotEmpty){
-      ServeiChat().enviarMensaje(
-        widget.idReceptor, 
-        tecMissatge.text
-        );
-
-        tecMissatge.clear();
-
-
+      tecMissatge.clear();
+    }
   }
 
-}
+  // Función para construir un item de mensaje
+  Widget _construirItemMissatge(DocumentSnapshot DocumentSnapshot) {
+     Map<String, dynamic> data = DocumentSnapshot.data() as Map<String, dynamic>;
+
+     return BombollaMissatge(missatge : data["missatge"]);
+
+    // Timestamp si existe
+    ;
+  }
 }

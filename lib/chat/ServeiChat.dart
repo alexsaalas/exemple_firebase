@@ -45,4 +45,19 @@ class ServeiChat {
           nouMissatge.retornaMapaMissatge(),
     );
   }
+  Stream<QuerySnapshot> getMissatges(String idUsuariActual, String idReceptor) {
+  // Crear el idSalaChat igual que cuando guardamos los mensajes
+  List<String> idsUsuaris = [idUsuariActual, idReceptor];
+  idsUsuaris.sort(); // Ordenar los IDs de los usuarios
+  String idSalaChat = idsUsuaris.join("_");
+
+  // Obtener el stream de mensajes desde Firestore
+  return _firestore.collection("SalesChat")
+      .doc(idSalaChat)
+      .collection("Missatges")
+      .orderBy("timestamp", descending: false) // Ordenar por timestamp, ascendente
+      .snapshots(); // Devolver el stream de snapshots
+}
+
+
 }
