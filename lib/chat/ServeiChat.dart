@@ -11,7 +11,7 @@ class ServeiChat {
   Stream<List<Map<String, dynamic>>> getUsuaris() {
     return _firestore.collection("Usuaris").snapshots().map((event) {
       return event.docs.map((document) {
-        return document.data() as Map<String, dynamic>;
+        return document.data();
       }).toList();
     });
   }
@@ -41,12 +41,8 @@ class ServeiChat {
     await _firestore.collection("SalesChat")
         .doc(idSalaChat) // Referencia única de la sala
         .collection("Missatges") // Subcolección de mensajes
-        .add({
-      'idAutor': nouMissatge.idAutor,
-      'emailAutor': nouMissatge.emailAutor,
-      'idReceptor': nouMissatge.idReceptor,
-      'missatge': nouMissatge.missatge,
-      'timestamp': nouMissatge.timestamp,
-    });
+        .add(
+          nouMissatge.retornaMapaMissatge(),
+    );
   }
 }

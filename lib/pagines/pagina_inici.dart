@@ -1,5 +1,6 @@
 import 'package:exemple_firebase/chat/ServeiChat.dart';
 import 'package:exemple_firebase/components/item_usuari.dart';
+import 'package:exemple_firebase/pagines/pagina_chat.dart';
 import 'package:flutter/material.dart';
 import 'package:exemple_firebase/auth/servei_auth.dart'; // Asegúrate de importar tu servicio de autenticación
 
@@ -45,22 +46,28 @@ class _PaginaIniciState extends State<PaginaInici> {
 
           // Se devuelven los datos
           return ListView(
-            children: snapshot.data!.map<Widget>((dadesUsuari) {
-              return _construeixUsuari(dadesUsuari); // Llamar a tu función _construeixUsuari
-            }).toList(), // Asegúrate de convertir el map en una lista
+            children: snapshot.data!.map<Widget>((dadesUsuari) 
+              => _construeixUsuari(dadesUsuari,context) // Llamar a tu función _construeixUsuari
+            ).toList(), // Asegúrate de convertir el map en una lista
           );
         },
       ),
     );
   }
 
-  Widget _construeixUsuari(Map<String, dynamic> dadesUsuari) {
+  Widget _construeixUsuari(Map<String, dynamic> dadesUsuari, BuildContext context) {
     if(dadesUsuari ["email"] == ServeiAuth().getUsuariActual()!.email) {
       return Container();
 
     }
     
-    return ItemUsuari(emailUsuari: dadesUsuari["email"], onTap: () {},);
+    return ItemUsuari(emailUsuari: dadesUsuari["email"], onTap: () {
+      Navigator.push(context, 
+      MaterialPageRoute(
+        builder: (context) => PaginaChat(idReceptor: dadesUsuari["uid"],)
+        )
+        );
+    },);
     // Aquí construyes tu widget para mostrar los datos del usuario
     
   }
