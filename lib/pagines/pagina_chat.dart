@@ -15,6 +15,23 @@ class PaginaChat extends StatefulWidget {
 
 class _PaginaChatState extends State<PaginaChat> {
   final TextEditingController tecMissatge = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 500), () {
+      ferScrollCapAvall();
+    });
+  }
+
+  void ferScrollCapAvall() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(seconds: 1),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +39,7 @@ class _PaginaChatState extends State<PaginaChat> {
       backgroundColor: Colors.teal[100],
       appBar: AppBar(
         backgroundColor: Colors.amber,
-        title: Text("Sala chat"),
+        title: const Text("Sala chat"),
       ),
       body: Column(
         children: [
@@ -55,6 +72,7 @@ class _PaginaChatState extends State<PaginaChat> {
           // Retornar datos (mensajes)
           if (snapshot.hasData) {
             return ListView(
+              controller: _scrollController,
               children: snapshot.data!.docs.map((document) {
                 return _construirItemMissatge(document);
               }).toList(),
@@ -101,16 +119,19 @@ class _PaginaChatState extends State<PaginaChat> {
       );
 
       tecMissatge.clear();
+      Future.delayed(const Duration(milliseconds: 500), () {
+        ferScrollCapAvall();
+      });
     }
   }
 
   // Función para construir un item de mensaje
-  Widget _construirItemMissatge(DocumentSnapshot DocumentSnapshot) {
-     Map<String, dynamic> data = DocumentSnapshot.data() as Map<String, dynamic>;
+  Widget _construirItemMissatge(DocumentSnapshot documentSnapshot) {
+    Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
 
-     return BombollaMissatge(missatge : data["missatge"]);
-
-    // Timestamp si existe
-    ;
+    return BombollaMissatge(
+      missatge: data["missatge"],
+      idAutor: data["idAutor"],
+    );
   }
 }
