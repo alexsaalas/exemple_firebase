@@ -17,17 +17,40 @@ class _PaginaChatState extends State<PaginaChat> {
   final TextEditingController tecMissatge = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
+  // Usamos el FocusNode para escuchar cambios del teclado
+  FocusNode teclatMobil = FocusNode();
+
   @override
   void initState() {
     super.initState();
+
+    // Agregamos un listener al FocusNode para controlar cuando el teclado se abre/cierra
+    teclatMobil.addListener(() {
+      if (teclatMobil.hasFocus) {
+        // El teclado está visible
+        Future.delayed(const Duration(milliseconds: 500), () {
+          ferScrollCapAvall();
+        });
+      }
+    });
+
+    // Este Future.delayed es redundante ya que se manejará con el listener de teclatMobil
     Future.delayed(const Duration(milliseconds: 500), () {
       ferScrollCapAvall();
     });
   }
 
+  @override
+  void dispose() {
+    // No olvides limpiar el FocusNode
+    teclatMobil.dispose();
+    super.dispose();
+  }
+
   void ferScrollCapAvall() {
+    // Desplazamos la lista hasta el final
     _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
+      _scrollController.position.maxScrollExtent + 40,
       duration: const Duration(seconds: 1),
       curve: Curves.fastOutSlowIn,
     );
@@ -43,10 +66,10 @@ class _PaginaChatState extends State<PaginaChat> {
       ),
       body: Column(
         children: [
-          // Zona mensajes
+          // Zona de mensajes
           _crearZonaMostrarMensajes(),
 
-          // Zona enviar mensaje
+          // Zona para enviar mensajes
           _crearZonaEnviarMensaje(),
         ],
       ),
@@ -69,7 +92,7 @@ class _PaginaChatState extends State<PaginaChat> {
             return const Text("Cargando...");
           }
 
-          // Retornar datos (mensajes)
+          // Si hay datos (mensajes)
           if (snapshot.hasData) {
             return ListView(
               controller: _scrollController,
@@ -79,7 +102,7 @@ class _PaginaChatState extends State<PaginaChat> {
             );
           }
 
-          // Si no hay datos
+          // Si no hay mensajes
           return const Center(child: Text("No hay mensajes"));
         },
       ),
@@ -94,6 +117,7 @@ class _PaginaChatState extends State<PaginaChat> {
           Expanded(
             child: TextField(
               controller: tecMissatge,
+              focusNode: teclatMobil, // Vinculamos el FocusNode al TextField
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.amber[200],
@@ -104,7 +128,7 @@ class _PaginaChatState extends State<PaginaChat> {
           IconButton(
             onPressed: enviarMissatge,
             icon: const Icon(Icons.send),
-            color: Colors.green, // Cambia el color del icono aquí
+            color: Colors.green, // Color del ícono
           ),
         ],
       ),
@@ -113,6 +137,7 @@ class _PaginaChatState extends State<PaginaChat> {
 
   void enviarMissatge() async {
     if (tecMissatge.text.isNotEmpty) {
+      // Enviar el mensaje a Firestore
       await ServeiChat().enviarMensaje(
         widget.idReceptor,
         tecMissatge.text,
