@@ -57,7 +57,5 @@ class ServeiChat {
       .collection("Missatges")
       .orderBy("timestamp", descending: false) // Ordenar por timestamp, ascendente
       .snapshots(); // Devolver el stream de snapshots
-}
-
-
+  }
 }

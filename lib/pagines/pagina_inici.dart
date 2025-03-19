@@ -1,5 +1,6 @@
 import 'package:exemple_firebase/chat/ServeiChat.dart';
 import 'package:exemple_firebase/components/item_usuari.dart';
+import 'package:exemple_firebase/pagines/editar_dades_usuaris.dart';
 import 'package:exemple_firebase/pagines/pagina_chat.dart';
 import 'package:flutter/material.dart';
 import 'package:exemple_firebase/auth/servei_auth.dart'; // Asegúrate de importar tu servicio de autenticación
@@ -26,6 +27,12 @@ class _PaginaIniciState extends State<PaginaInici> {
         backgroundColor: Colors.deepPurple[200],
         title:  Text(ServeiAuth().getUsuariActual()!.email.toString()),
         actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => EditarDadesUsuaris()));
+            },
+            icon: const Icon(Icons.person),
+            ),
           IconButton(
             onPressed: () async {
               await _logout(context); // Llamamos al método que gestiona el cierre de sesión.
