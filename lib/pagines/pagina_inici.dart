@@ -29,7 +29,7 @@ class _PaginaIniciState extends State<PaginaInici> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => EditarDadesUsuaris()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => EditarDadesUsuari()));
             },
             icon: const Icon(Icons.person),
             ),

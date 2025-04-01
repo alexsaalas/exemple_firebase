@@ -6,7 +6,11 @@ class BombollaMissatge extends StatelessWidget {
   final String missatge;
   final String idAutor;
 
-  const BombollaMissatge({super.key, required this.missatge, required this.idAutor}); // Cambié el nombre del constructor a MyWidget
+  const BombollaMissatge({
+    super.key, 
+    required this.missatge, 
+    required this.idAutor
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,14 +19,25 @@ class BombollaMissatge extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Align(
-          alignment: idAutor == ServeiAuth().getUsuariActual()!.uid ? Alignment.centerRight : Alignment.centerLeft,
+          alignment: idAutor == ServeiAuth().getUsuariActual()!.uid 
+              ? Alignment.centerRight 
+              : Alignment.centerLeft,
           child: Container(
             decoration: BoxDecoration(
-              color: idAutor == ServeiAuth().getUsuariActual()!.uid ? Colors.green : Colors.amber[100],
+              color: idAutor == ServeiAuth().getUsuariActual()!.uid 
+                  ? Colors.green 
+                  : Colors.amber[200], // Usamos amber[200] que era el color que tenías aparte
               borderRadius: BorderRadius.circular(10),
             ),
-            color:  Colors.amber[200],
-            child: Text(missatge),
+            padding: const EdgeInsets.all(12), // Añadido padding para mejor visualización
+            child: Text(
+              missatge,
+              style: TextStyle(
+                color: idAutor == ServeiAuth().getUsuariActual()!.uid
+                    ? Colors.white // Texto blanco para mensajes verdes (propios)
+                    : Colors.black, // Texto negro para mensajes amarillos (ajenos)
+              ),
+            ),
           ),
         ),
       ),
